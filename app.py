@@ -2,7 +2,8 @@ from flask import Flask, render_template, request, redirect, url_for
 
 app = Flask(__name__)
 
-# Temporary list to store tasks
+# Temporary list to store tasks.
+# Each item is a dictionary: {'task': 'Example', 'done': False}
 tasks = []
 
 
@@ -15,7 +16,14 @@ def home():
 def add_task():
     task = request.form.get('task')
     if task:
-        tasks.append(task)
+        tasks.append({'task': task, 'done': False})
+    return redirect(url_for('home'))
+
+
+@app.route('/complete/<int:index>', methods=['POST'])
+def complete_task(index):
+    if 0 <= index < len(tasks):
+        tasks[index]['done'] = not tasks[index]['done']
     return redirect(url_for('home'))
 
 

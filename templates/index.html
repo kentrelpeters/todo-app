@@ -10,24 +10,35 @@
     <div class="container">
         <h1>My To-Do List</h1>
         <p>Keep track of your tasks!</p>
-        
+
         <form method="POST" action="{{ url_for('add_task') }}" class="task-form">
-            <input 
-                type="text" 
-                name="task" 
-                placeholder="Enter a new task..." 
-                class="task-input" 
+            <input
+                type="text"
+                name="task"
+                placeholder="Enter a new task..."
+                class="task-input"
                 required
             >
             <button type="submit" class="add-btn">Add Task</button>
         </form>
-        
+
         <div class="task-list">
             {% if tasks %}
                 <h2>Tasks:</h2>
                 <ul>
                     {% for task in tasks %}
-                        <li>{{ task }}</li>
+                        <li class="task-item {{ 'completed' if task.done else 'incomplete' }}">
+                            <span>{{ task.task }}</span>
+                            <form method="POST" action="{{ url_for('complete_task', index=loop.index0) }}" class="complete-form">
+                                <button type="submit" class="complete-btn">
+                                    {% if task.done %}
+                                        Mark as Incomplete
+                                    {% else %}
+                                        Mark as Complete
+                                    {% endif %}
+                                </button>
+                            </form>
+                        </li>
                     {% endfor %}
                 </ul>
             {% else %}
